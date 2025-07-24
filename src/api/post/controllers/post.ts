@@ -31,7 +31,7 @@ export default factories.createCoreController('api::post.post', ({ strapi }) => 
   // Override default find to only show published posts
   async find(ctx) {
     ctx.query.filters = {
-      ...ctx.query.filters,
+        ...((ctx.query.filters as object) || {}),
       publishedAt: { $notNull: true }
     }
 
@@ -40,7 +40,7 @@ export default factories.createCoreController('api::post.post', ({ strapi }) => 
   },
 
   // Custom method to get all slugs for static generation
-  async getSlugs(ctx) {
+  async getSlugs(_ctx) {
     const entities = await strapi.db.query('api::post.post').findMany({
       select: ['slug'],
       where: { publishedAt: { $notNull: true } }

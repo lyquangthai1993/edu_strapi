@@ -25,7 +25,7 @@ export default factories.createCoreController('api::category.category', ({ strap
   // Override default find to only show active categories
   async find(ctx) {
     ctx.query.filters = {
-      ...ctx.query.filters,
+      ...((ctx.query.filters as object) || {}),
       isActive: true
     }
 
