@@ -1,0 +1,77 @@
+{
+  "collectionName": "components_seo_seo_fields",
+  "info": {
+    "displayName": "SEO Fields",
+    "description": "SEO metadata for content optimization"
+  },
+  "options": {},
+  "attributes": {
+    "metaTitle": {
+      "type": "string",
+      "maxLength": 60,
+      "minLength": 5
+    },
+    "metaDescription": {
+      "type": "text",
+      "maxLength": 160,
+      "minLength": 50
+    },
+    "keywords": {
+      "type": "json",
+      "default": []
+    },
+    "canonicalURL": {
+      "type": "string",
+      "regex": "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(\\/.*)?$"
+    },
+    "ogTitle": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "ogDescription": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "twitterTitle": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "twitterDescription": {
+      "type": "text",
+      "maxLength": 200
+    },
+    "twitterImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "noIndex": {
+      "type": "boolean",
+      "default": false
+    },
+    "noFollow": {
+      "type": "boolean",
+      "default": false
+    },
+    "structuredData": {
+      "type": "json",
+      "default": {}
+    },
+    "focusKeyword": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "metaRobots": {
+      "type": "enumeration",
+      "enum": ["index,follow", "index,nofollow", "noindex,follow", "noindex,nofollow"],
+      "default": "index,follow"
+    }
+  }
+}
