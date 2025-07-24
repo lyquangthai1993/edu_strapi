@@ -22,7 +22,10 @@
       "type": "uid",
       "targetField": "name",
       "required": true,
-      "unique": true
+      "unique": true,
+      "configurable": false,
+      "writable": false,
+      "visible": true
     },
     "description": {
       "type": "text",

@@ -26,7 +26,10 @@
       "type": "uid",
       "targetField": "title",
       "required": true,
-      "unique": true
+      "unique": true,
+      "configurable": false,
+      "writable": false,
+      "visible": true
     },
     "content": {
       "type": "richtext",
