@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": "Dynamic pages with SEO optimization and slug-based routing"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "comment": ""
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "unique": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo.seo-fields"
+    },
+    "showInNavigation": {
+      "type": "boolean",
+      "default": true
+    },
+    "navigationOrder": {
+      "type": "integer",
+      "default": 0
+    },
+    "parentPage": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::page.page",
+      "inversedBy": "childPages"
+    },
+    "childPages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::page.page",
+      "mappedBy": "parentPage"
+    },
+    "isHomepage": {
+      "type": "boolean",
+      "default": false
+    },
+    "template": {
+      "type": "enumeration",
+      "enum": ["default", "landing", "contact", "about"],
+      "default": "default"
+    }
+  }
+}
