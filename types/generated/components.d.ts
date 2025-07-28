@@ -1,5 +1,23 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BasicPage extends Struct.ComponentSchema {
+  collectionName: 'components_basic_pages';
+  info: {
+    description: 'Basic page component for dynamic content';
+    displayName: 'Page';
+    icon: 'file-text';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SeoSeoFields extends Struct.ComponentSchema {
   collectionName: 'components_seo_seo_fields';
   info: {
@@ -51,10 +69,36 @@ export interface SeoSeoFields extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedSeo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_seos';
+  info: {
+    description: 'SEO meta data for pages';
+    displayName: 'SEO';
+    icon: 'search';
+  };
+  attributes: {
+    canonicalURL: Schema.Attribute.String;
+    keywords: Schema.Attribute.String;
+    metaDescription: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    metaRobots: Schema.Attribute.String;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    metaViewport: Schema.Attribute.String;
+    structuredData: Schema.Attribute.JSON;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'basic.page': BasicPage;
       'seo.seo-fields': SeoSeoFields;
+      'shared.seo': SharedSeo;
     }
   }
 }

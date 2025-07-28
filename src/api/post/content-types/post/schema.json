@@ -61,7 +61,7 @@
       "type": "json",
       "default": []
     },
-    "status": {
+    "post_status": {
       "type": "enumeration",
       "enum": ["draft", "published", "archived"],
       "default": "draft",

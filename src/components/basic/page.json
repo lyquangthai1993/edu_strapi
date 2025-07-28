@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_basic_pages",
+  "info": {
+    "displayName": "Page",
+    "icon": "file-text",
+    "description": "Basic page component for dynamic content"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    },
+    "publishedAt": {
+      "type": "datetime"
+    }
+  }
+}

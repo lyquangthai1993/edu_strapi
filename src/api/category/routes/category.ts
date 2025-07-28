@@ -1,28 +1,12 @@
-export default {
-  routes: [
-    {
-      method: 'GET',
-      path: '/categories',
-      handler: 'category.find',
-      config: {
-        auth: false,
-      },
+import { factories } from '@strapi/strapi'
+
+export default factories.createCoreRouter('api::category.category', {
+  config: {
+    find: {
+      auth: false,
     },
-    {
-      method: 'GET',
-      path: '/categories/slug/:slug',
-      handler: 'category.findBySlug',
-      config: {
-        auth: false,
-      },
+    findOne: {
+      auth: false,
     },
-    {
-      method: 'GET',
-      path: '/categories/:documentId',
-      handler: 'category.findOne',
-      config: {
-        auth: false,
-      },
-    },
-  ],
-}
+  },
+})
