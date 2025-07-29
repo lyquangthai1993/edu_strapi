@@ -1,4 +1,35 @@
 
+// Helper function to generate unique slug
+async function generateUniqueSlug(title: string, excludeId: number | null = null): Promise<string> {
+  const baseSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim()
+    .replace(/^-+|-+$/g, '')
+
+  let slug = baseSlug
+  let counter = 1
+
+  while (true) {
+    const existingPage = await strapi.db.query('api::page.page').findOne({
+      where: { 
+        slug,
+        ...(excludeId && { id: { $ne: excludeId } })
+      }
+    })
+
+    if (!existingPage) {
+      break
+    }
+
+    slug = `${baseSlug}-${counter}`
+    counter++
+  }
+
+  return slug
+}
 
 export default {
   async beforeCreate(event) {
@@ -12,50 +43,14 @@ export default {
       })
     }
 
-    // Auto-generate slug if not provided
-    if (!data.slug && data.title) {
-      data.slug = data.title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim()
-    }
-
-    // Validate slug uniqueness and auto-generate if needed
-    if (data.slug) {
-      const existing = await strapi.db.query('api::page.page').findOne({
-        where: { slug: data.slug }
-      })
-      
-      if (existing) {
-        // Auto-generate a unique slug instead of throwing error
-        const baseSlug = data.slug
-        let counter = 1
-        let newSlug = `${baseSlug}-${counter}`
-        
-        while (true) {
-          const duplicateCheck = await strapi.db.query('api::page.page').findOne({
-            where: { slug: newSlug }
-          })
-          
-          if (!duplicateCheck) {
-            data.slug = newSlug
-            break
-          }
-          
-          counter++
-          newSlug = `${baseSlug}-${counter}`
-        }
-      }
+    // Generate slug only if not provided (same as posts)
+    if (data.title && !data.slug) {
+      data.slug = await generateUniqueSlug(data.title)
     }
   },
 
   async beforeUpdate(event) {
     const { data, where } = event.params
-    
-    // Get the current page ID (could be documentId in Strapi v5)
-    const currentId = where.documentId || where.id
     
     // Ensure only one homepage exists
     if (data.isHomepage) {
@@ -68,17 +63,15 @@ export default {
       })
     }
 
-    // Validate slug uniqueness on update (only if slug is being changed)
-    if (data.slug) {
-      const existing = await strapi.db.query('api::page.page').findOne({
-        where: { 
-          slug: data.slug,
-          $not: where
-        }
+    // Auto-update slug when title changes (same as posts)
+    if (data.title) {
+      const existingPage = await strapi.db.query('api::page.page').findOne({
+        where
       })
       
-      if (existing) {
-        throw new Error(`Page with slug "${data.slug}" already exists`)
+      // Only update slug if title changed
+      if (existingPage && existingPage.title !== data.title) {
+        data.slug = await generateUniqueSlug(data.title, existingPage.id)
       }
     }
 
